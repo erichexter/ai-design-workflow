@@ -57,14 +57,6 @@ For each section:
 - Provide suggested answer options when useful
 - Always allow custom responses
 
-Example format:
-
-```
-Question
-Suggested Options
-Other (user-defined)
-```
-
 **4. Clarification Loop**
 
 When answers are vague or incomplete:
