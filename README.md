@@ -16,6 +16,7 @@ Prompts are designed to produce structured artifacts that can later feed impleme
 
 ## Requirements
 
+- [conduct-requirements-discovery](prompts/requirements/conduct-requirements-discovery.md)
 - [extract-requirements-from-notes](prompts/requirements/extract-requirements-from-notes.md)
 - [generate-product-requirements](prompts/requirements/generate-product-requirements.md)
 - [generate-user-stories](prompts/requirements/generate-user-stories.md)
