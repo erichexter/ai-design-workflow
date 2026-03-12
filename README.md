@@ -4,6 +4,8 @@ A collection of reusable prompts for product definition and engineering architec
 
 Prompts are designed to produce structured artifacts that can later feed implementation workflows.
 
+**Using this library:** See [USAGE.md](USAGE.md) for how to use these prompts in Claude, ChatGPT, or OpenCode (`/dw-*` commands).
+
 ---
 
 ## Discovery
