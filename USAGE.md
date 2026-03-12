@@ -4,6 +4,8 @@ The prompt files in `prompts/` are the source of truth. They are plain markdown,
 
 The `opencode/` folder contains pre-built integrations for OpenCode. Do not edit those files directly — if a prompt changes, update the source in `prompts/` and reflect the change in `opencode/` accordingly.
 
+The `mcp-server/` folder contains a Cloudflare Worker that exposes all prompts as MCP tools. See the [MCP Server](#mcp-server) section below for connection instructions.
+
 ---
 
 ## Claude / ChatGPT
@@ -104,6 +106,74 @@ When a prompt in `prompts/` is updated:
 2. Re-copy the updated command to your `~/.config/opencode/commands/` or `.opencode/commands/`
 
 There is no auto-sync — it is a manual copy step.
+
+---
+
+## MCP Server
+
+The MCP server exposes every prompt in this library as a named tool (`dw-*`) over the MCP Streamable HTTP transport. Once connected, any MCP-compatible client — Claude Desktop, OpenCode, ChatGPT — can call prompts directly without copy/paste.
+
+### How it works
+
+A GitHub Action regenerates `mcp-server/prompts.json` automatically on every push that touches `prompts/`. The Cloudflare Worker reads that file to discover tools at runtime. Adding a new prompt to the repo makes it available via MCP within ~60 seconds — no manual steps.
+
+### Deployment (one-time setup)
+
+The server is deployed to Cloudflare Workers. You need a free Cloudflare account to activate it.
+
+1. Sign up at [cloudflare.com](https://cloudflare.com) (free)
+2. Go to **Workers & Pages** → **Create** → **Import a repository**
+3. Select `erichexter/ai-design-workflow`
+4. Set **root directory** to `mcp-server/`
+5. Set **build command** to `npm run build`
+6. Set **deploy command** to `npx wrangler deploy`
+7. Note the assigned URL: `https://ai-design-workflow.<your-subdomain>.workers.dev`
+
+Every subsequent push to `master` auto-deploys.
+
+### Connecting clients
+
+Replace `<your-subdomain>` with the subdomain assigned by Cloudflare.
+
+**Claude Desktop** — add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%AppData%\Claude\claude_desktop_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "ai-design-workflow": {
+      "url": "https://ai-design-workflow.<your-subdomain>.workers.dev/mcp"
+    }
+  }
+}
+```
+
+**OpenCode** — add to `opencode.json` in your project or `~/.config/opencode/opencode.json` globally:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "ai-design-workflow": {
+        "url": "https://ai-design-workflow.<your-subdomain>.workers.dev/mcp"
+      }
+    }
+  }
+}
+```
+
+**ChatGPT** (Plus/Team/Enterprise) — add as a Custom GPT Action using the server URL, or connect via the ChatGPT connectors panel using:
+```
+https://ai-design-workflow.<your-subdomain>.workers.dev/mcp
+```
+
+### Health check
+
+Verify the server is running:
+```
+GET https://ai-design-workflow.<your-subdomain>.workers.dev/health
+```
+
+Returns `{"status":"ok","server":"ai-design-workflow-mcp"}`.
 
 ---
 

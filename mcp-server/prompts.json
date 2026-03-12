@@ -1,0 +1,119 @@
+{
+  "generated": "2026-03-12T18:28:11.262Z",
+  "repo": "erichexter/ai-design-workflow",
+  "branch": "master",
+  "prompts": [
+    {
+      "tool": "dw-generate-api-spec",
+      "category": "architecture",
+      "description": "Produce a structured API specification from a feature description or architecture design.",
+      "path": "prompts/architecture/generate-api-spec.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/architecture/generate-api-spec.md"
+    },
+    {
+      "tool": "dw-propose-architecture-options",
+      "category": "architecture",
+      "description": "Generate multiple viable architecture approaches for a given product or feature, with tradeoffs.",
+      "path": "prompts/architecture/propose-architecture-options.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/architecture/propose-architecture-options.md"
+    },
+    {
+      "tool": "dw-review-architecture-design",
+      "category": "architecture",
+      "description": "Critically evaluate an existing architecture design for risks, gaps, and improvement opportunities.",
+      "path": "prompts/architecture/review-architecture-design.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/architecture/review-architecture-design.md"
+    },
+    {
+      "tool": "dw-summarize-meeting-notes",
+      "category": "communication",
+      "description": "Convert raw meeting notes into a concise, structured summary with decisions, actions, and open questions.",
+      "path": "prompts/communication/summarize-meeting-notes.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/communication/summarize-meeting-notes.md"
+    },
+    {
+      "tool": "dw-clarify-feature-idea",
+      "category": "discovery",
+      "description": "Ask the right questions to sharpen a rough feature idea before any requirements work begins.",
+      "path": "prompts/discovery/clarify-feature-idea.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/discovery/clarify-feature-idea.md"
+    },
+    {
+      "tool": "dw-define-problem",
+      "category": "discovery",
+      "description": "Transform a vague idea, complaint, or observation into a clearly scoped problem statement.",
+      "path": "prompts/discovery/define-problem.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/discovery/define-problem.md"
+    },
+    {
+      "tool": "dw-identify-user-personas",
+      "category": "discovery",
+      "description": "Identify the distinct user types who will interact with a product or feature.",
+      "path": "prompts/discovery/identify-user-personas.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/discovery/identify-user-personas.md"
+    },
+    {
+      "tool": "dw-generate-implementation-plan",
+      "category": "planning",
+      "description": "Produce a structured implementation plan from a set of requirements and architecture decisions.",
+      "path": "prompts/planning/generate-implementation-plan.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/planning/generate-implementation-plan.md"
+    },
+    {
+      "tool": "dw-identify-technical-risks",
+      "category": "planning",
+      "description": "Surface technical risks in a proposed design or implementation plan before work begins.",
+      "path": "prompts/planning/identify-technical-risks.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/planning/identify-technical-risks.md"
+    },
+    {
+      "tool": "dw-conduct-requirements-discovery",
+      "category": "requirements",
+      "description": "Interactively gather, clarify, and document application requirements through structured conversation. Use this prompt when starting from a raw idea and needing to produce a complete requirements specification before any design or architecture work begins.",
+      "path": "prompts/requirements/conduct-requirements-discovery.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/requirements/conduct-requirements-discovery.md"
+    },
+    {
+      "tool": "dw-extract-requirements-from-notes",
+      "category": "requirements",
+      "description": "Pull structured requirements out of raw meeting notes, chat transcripts, or informal documents.",
+      "path": "prompts/requirements/extract-requirements-from-notes.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/requirements/extract-requirements-from-notes.md"
+    },
+    {
+      "tool": "dw-generate-acceptance-criteria",
+      "category": "requirements",
+      "description": "Define the conditions that must be true for a user story or feature to be considered complete.",
+      "path": "prompts/requirements/generate-acceptance-criteria.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/requirements/generate-acceptance-criteria.md"
+    },
+    {
+      "tool": "dw-generate-product-requirements",
+      "category": "requirements",
+      "description": "Convert a rough product idea or meeting notes into structured product requirements.",
+      "path": "prompts/requirements/generate-product-requirements.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/requirements/generate-product-requirements.md"
+    },
+    {
+      "tool": "dw-generate-user-stories",
+      "category": "requirements",
+      "description": "Convert product requirements or feature descriptions into well-formed user stories.",
+      "path": "prompts/requirements/generate-user-stories.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/requirements/generate-user-stories.md"
+    },
+    {
+      "tool": "dw-evaluate-architecture-tradeoffs",
+      "category": "review",
+      "description": "Perform a structured tradeoff analysis between two or more architectural approaches.",
+      "path": "prompts/review/evaluate-architecture-tradeoffs.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/review/evaluate-architecture-tradeoffs.md"
+    },
+    {
+      "tool": "dw-identify-edge-cases",
+      "category": "review",
+      "description": "Find the boundary conditions, failure modes, and unusual scenarios that a design or implementation must handle.",
+      "path": "prompts/review/identify-edge-cases.md",
+      "raw_url": "https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/prompts/review/identify-edge-cases.md"
+    }
+  ]
+}

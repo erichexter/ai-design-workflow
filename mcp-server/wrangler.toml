@@ -1,0 +1,13 @@
+name = "ai-design-workflow"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# account_id is set in the Cloudflare dashboard when you connect the repo.
+# You can also set it here after creating your Cloudflare account:
+# account_id = "your-account-id-here"
+
+[vars]
+REPO_OWNER = "erichexter"
+REPO_NAME = "ai-design-workflow"
+REPO_BRANCH = "master"
