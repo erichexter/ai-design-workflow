@@ -2,138 +2,38 @@
 
 The prompt files in `prompts/` are the source of truth. They are plain markdown, portable across any AI tool.
 
-The `opencode/` folder contains pre-built integrations for OpenCode. Do not edit those files directly — if a prompt changes, update the source in `prompts/` and reflect the change in `opencode/` accordingly.
-
-The `mcp-server/` folder contains a Cloudflare Worker that exposes all prompts as MCP tools. See the [MCP Server](#mcp-server) section below for connection instructions.
-
----
-
-## Claude / ChatGPT
-
-1. Open the prompt file from `prompts/`
-2. Copy the full contents
-3. Paste into a new conversation
-4. Replace `{{INPUT}}` with your actual input
-
-No setup required. Works in Claude.ai, ChatGPT, or any chat interface.
-
----
-
-## OpenCode
-
-OpenCode uses two mechanisms from this library: **commands** and **skills**.
-
-### Commands (`/dw-*`)
-
-Commands are short prompts you invoke directly by typing `/dw-` in the OpenCode TUI.
-
-**Setup (global — available in all projects):**
-
-```bash
-cp -r opencode/commands/* ~/.config/opencode/commands/
-```
-
-**Setup (per-project — available in one repo only):**
-
-```bash
-cp -r opencode/commands/* .opencode/commands/
-```
-
-**Usage:**
-
-```
-/dw-define-problem describe the problem here
-/dw-generate-product-requirements paste requirements notes here
-/dw-generate-user-stories based on the requirements we just defined
-/dw-propose-architecture-options using the requirements above
-```
-
-Everything after the command name is passed as input. You can also paste multi-line content after triggering the command.
-
-**Available commands:**
-
-| Command | Purpose |
-|---|---|
-| `/dw-define-problem` | Turn a vague idea into a scoped problem statement |
-| `/dw-clarify-feature-idea` | Surface questions to sharpen a rough idea |
-| `/dw-identify-user-personas` | Identify distinct user types for a feature |
-| `/dw-extract-requirements-from-notes` | Pull requirements from raw notes or transcripts |
-| `/dw-generate-product-requirements` | Generate structured requirements from an idea |
-| `/dw-generate-user-stories` | Convert requirements into user stories |
-| `/dw-generate-acceptance-criteria` | Write Given/When/Then criteria for stories |
-| `/dw-propose-architecture-options` | Generate architecture options with tradeoffs |
-| `/dw-review-architecture-design` | Critically review an architecture design |
-| `/dw-generate-api-spec` | Produce a structured API specification |
-| `/dw-generate-implementation-plan` | Break work into sequenced, estimated tasks |
-| `/dw-identify-technical-risks` | Surface risks before implementation begins |
-| `/dw-identify-edge-cases` | Find boundary conditions a design must handle |
-| `/dw-evaluate-architecture-tradeoffs` | Compare architectural approaches |
-| `/dw-summarize-meeting-notes` | Extract decisions, actions, and open questions |
-
----
-
-### Skills (`dw-requirements-discovery`)
-
-The requirements discovery prompt is long and interactive — it runs as an **Agent Skill** so OpenCode loads it on demand rather than including it in every session's context.
-
-**Setup (global):**
-
-```bash
-cp -r opencode/skills/dw-requirements-discovery ~/.config/opencode/skills/
-```
-
-**Setup (per-project):**
-
-```bash
-cp -r opencode/skills/dw-requirements-discovery .opencode/skills/
-```
-
-**Usage:**
-
-The agent will automatically discover and use this skill when you ask it to gather requirements. You can also trigger it explicitly:
-
-```
-Use the dw-requirements-discovery skill to help me define requirements for a new feature
-```
-
----
-
-## Keeping Commands Up To Date
-
-When a prompt in `prompts/` is updated:
-
-1. Update the matching file in `opencode/commands/` (same content, frontmatter + `$ARGUMENTS` instead of `{{INPUT}}`)
-2. Re-copy the updated command to your `~/.config/opencode/commands/` or `.opencode/commands/`
-
-There is no auto-sync — it is a manual copy step.
-
 ---
 
 ## MCP Server
 
-The MCP server exposes every prompt in this library as a named tool (`dw-*`) over the MCP Streamable HTTP transport. Once connected, any MCP-compatible client — Claude Desktop, OpenCode, ChatGPT — can call prompts directly without copy/paste.
+The fastest way to use this library. The MCP server exposes all 16 prompts as `dw-*` tools over the MCP Streamable HTTP transport. Once connected, any MCP-compatible client — Claude Desktop, OpenCode, ChatGPT — can call prompts directly without copy/paste.
 
-### How it works
+**Server URL:** `https://ai-design-workflow.eric-hexter.workers.dev/mcp`
 
-A GitHub Action regenerates `mcp-server/prompts.json` automatically on every push that touches `prompts/`. The Cloudflare Worker reads that file to discover tools at runtime. Adding a new prompt to the repo makes it available via MCP within ~60 seconds — no manual steps.
+A GitHub Action regenerates `mcp-server/prompts.json` automatically on every push that touches `prompts/`. Adding a new prompt to the repo makes it available via MCP within ~60 seconds — no manual steps.
 
-### Deployment (one-time setup)
+### Connect: OpenCode
 
-The server is deployed to Cloudflare Workers. You need a free Cloudflare account to activate it.
+Add to `opencode.json` in your project, or globally at `~/.config/opencode/opencode.json`:
 
-1. Sign up at [cloudflare.com](https://cloudflare.com) (free)
-2. Go to **Workers & Pages** → **Create** → **Import a repository**
-3. Select `erichexter/ai-design-workflow`
-4. Set **root directory** to `mcp-server/`
-5. Set **build command** to `npm run build`
-6. Set **deploy command** to `npx wrangler deploy`
-7. Note the assigned URL: `https://ai-design-workflow.<your-subdomain>.workers.dev`
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "ai-design-workflow": {
+      "type": "remote",
+      "url": "https://ai-design-workflow.eric-hexter.workers.dev/mcp",
+      "enabled": true
+    }
+  }
+}
+```
 
-Every subsequent push to `master` auto-deploys.
+Restart OpenCode. All `dw-*` tools are now available to the agent automatically.
 
-### Connecting clients
+### Connect: Claude Desktop
 
-**Claude Desktop** — add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%AppData%\Claude\claude_desktop_config.json` (Windows):
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%AppData%\Claude\claude_desktop_config.json` (Windows):
 
 ```json
 {
@@ -145,26 +45,16 @@ Every subsequent push to `master` auto-deploys.
 }
 ```
 
-**OpenCode** — add to `opencode.json` in your project or `~/.config/opencode/opencode.json` globally:
+Restart Claude Desktop. The `dw-*` tools will appear in the tools panel.
 
-```json
-{
-  "mcp": {
-    "servers": {
-      "ai-design-workflow": {
-        "url": "https://ai-design-workflow.eric-hexter.workers.dev/mcp"
-      }
-    }
-  }
-}
-```
+### Connect: ChatGPT (Plus/Team/Enterprise)
 
-**ChatGPT** (Plus/Team/Enterprise) — connect via a Custom GPT Action:
+ChatGPT connects via a Custom GPT Action using an OpenAPI schema.
 
-1. Go to [chatgpt.com](https://chatgpt.com) and click **Explore GPTs** → **Create**
+1. Go to [chatgpt.com](https://chatgpt.com) → **Explore GPTs** → **Create**
 2. Click the **Configure** tab
-3. Scroll down to **Actions** and click **Create new action**
-4. In the **Schema** field, paste the following OpenAPI schema:
+3. Scroll to **Actions** → **Create new action**
+4. In the **Schema** field, paste:
 
 ```yaml
 openapi: 3.1.0
@@ -209,25 +99,17 @@ paths:
 ```
 
 5. Set **Authentication** to **None**
-6. Click **Save** and then **Update** the GPT
+6. Click **Save** then **Update**
 
-**Using tools in ChatGPT:**
-
-Once connected, ask ChatGPT to use a specific tool by name:
+Once connected, invoke tools by name or describe what you need:
 
 ```
-Use the dw-define-problem tool to help me define this problem: our checkout flow is losing users
+Use the dw-define-problem tool: our checkout flow is losing users at the payment step
 Use the dw-generate-product-requirements tool with these notes: [paste notes]
-Use the dw-propose-architecture-options tool based on these requirements: [paste requirements]
-```
-
-Or ask generically and let ChatGPT pick the right tool:
-
-```
 Help me turn this rough idea into structured product requirements
 ```
 
-**Available tools in ChatGPT:**
+### Available tools
 
 | Tool | Purpose |
 |---|---|
@@ -250,7 +132,6 @@ Help me turn this rough idea into structured product requirements
 
 ### Health check
 
-Verify the server is running:
 ```
 GET https://ai-design-workflow.eric-hexter.workers.dev/health
 ```
@@ -259,6 +140,110 @@ Returns `{"status":"ok","server":"ai-design-workflow-mcp"}`.
 
 ---
 
+## OpenCode
+
+OpenCode supports two integration options: the **MCP server** (recommended, above) and **local commands**.
+
+### Option 1: MCP server (recommended)
+
+Follow the MCP → Connect: OpenCode instructions above. No local file setup needed.
+
+### Option 2: Local commands (`/dw-*`)
+
+Use this if you prefer self-contained local commands that work without a network connection.
+
+**Install OpenCode:**
+
+```bash
+curl -fsSL https://opencode.ai/install | bash
+```
+
+Windows (choose one):
+```
+choco install opencode
+scoop install opencode
+npm install -g opencode-ai
+```
+
+**Install the design workflow commands — one-liner:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/opencode/install.sh | bash
+```
+
+This script:
+1. Creates `~/.config/opencode/commands/` if it does not exist
+2. Copies all `dw-*` command files from the repo
+3. Creates `~/.config/opencode/skills/` if it does not exist
+4. Copies the `dw-requirements-discovery` skill
+
+**Or install manually:**
+
+```bash
+# Clone the repo
+git clone https://github.com/erichexter/ai-design-workflow.git
+
+# Copy commands (global)
+cp -r ai-design-workflow/opencode/commands/* ~/.config/opencode/commands/
+
+# Copy skill (global)
+cp -r ai-design-workflow/opencode/skills/dw-requirements-discovery ~/.config/opencode/skills/
+```
+
+**Per-project install** (available in one repo only):
+
+```bash
+cp -r ai-design-workflow/opencode/commands/* .opencode/commands/
+cp -r ai-design-workflow/opencode/skills/dw-requirements-discovery .opencode/skills/
+```
+
+**Usage:**
+
+Type `/dw-` in OpenCode to see all available commands:
+
+```
+/dw-define-problem our checkout flow is losing users at the payment step
+/dw-generate-product-requirements based on the notes above
+/dw-generate-user-stories using the requirements we just created
+/dw-propose-architecture-options given these requirements
+```
+
+**Keeping local commands up to date:**
+
+When a prompt in `prompts/` changes, re-run the install one-liner:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/erichexter/ai-design-workflow/master/opencode/install.sh | bash
+```
+
+---
+
+## Claude / ChatGPT (copy/paste)
+
+No setup required. Works in any chat interface.
+
+1. Open the prompt file from `prompts/`
+2. Copy the full contents
+3. Paste into a new conversation
+4. Replace `{{INPUT}}` with your actual input
+
+---
+
 ## Workflow Usage
 
-Workflows in `workflows/` are reference documents, not executable commands. Open the relevant workflow file, follow the steps, and run the corresponding `/dw-*` command at each step.
+Workflows in `workflows/` are reference documents, not executable commands. Open the relevant workflow file, follow the steps, and run the corresponding tool or command at each step.
+
+---
+
+## MCP Server: Deployment
+
+The server is already deployed. If you fork this repo and want to deploy your own instance:
+
+1. Sign up at [cloudflare.com](https://cloudflare.com) (free)
+2. Go to **Workers & Pages** → **Create** → **Import a repository**
+3. Select your fork
+4. Set **root directory** to `mcp-server/`
+5. Set **build command** to `npm install && npm run build`
+6. Set **deploy command** to `npx wrangler deploy`
+
+Every subsequent push to `master` auto-deploys. The GitHub Action regenerates `prompts.json` automatically when `prompts/` changes.
