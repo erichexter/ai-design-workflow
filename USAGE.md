@@ -159,10 +159,94 @@ Every subsequent push to `master` auto-deploys.
 }
 ```
 
-**ChatGPT** (Plus/Team/Enterprise) — add as a Custom GPT Action using the server URL, or connect via the ChatGPT connectors panel using:
+**ChatGPT** (Plus/Team/Enterprise) — connect via a Custom GPT Action:
+
+1. Go to [chatgpt.com](https://chatgpt.com) and click **Explore GPTs** → **Create**
+2. Click the **Configure** tab
+3. Scroll down to **Actions** and click **Create new action**
+4. In the **Schema** field, paste the following OpenAPI schema:
+
+```yaml
+openapi: 3.1.0
+info:
+  title: AI Design Workflow
+  description: Design workflow prompts exposed as tools via MCP
+  version: 1.0.0
+servers:
+  - url: https://ai-design-workflow.eric-hexter.workers.dev
+paths:
+  /mcp:
+    post:
+      operationId: callMcp
+      summary: Call an MCP method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                params:
+                  type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+      responses:
+        "200":
+          description: MCP response
+          content:
+            application/json:
+              schema:
+                type: object
 ```
-https://ai-design-workflow.eric-hexter.workers.dev/mcp
+
+5. Set **Authentication** to **None**
+6. Click **Save** and then **Update** the GPT
+
+**Using tools in ChatGPT:**
+
+Once connected, ask ChatGPT to use a specific tool by name:
+
 ```
+Use the dw-define-problem tool to help me define this problem: our checkout flow is losing users
+Use the dw-generate-product-requirements tool with these notes: [paste notes]
+Use the dw-propose-architecture-options tool based on these requirements: [paste requirements]
+```
+
+Or ask generically and let ChatGPT pick the right tool:
+
+```
+Help me turn this rough idea into structured product requirements
+```
+
+**Available tools in ChatGPT:**
+
+| Tool | Purpose |
+|---|---|
+| `dw-define-problem` | Turn a vague idea into a scoped problem statement |
+| `dw-clarify-feature-idea` | Surface questions to sharpen a rough idea |
+| `dw-identify-user-personas` | Identify distinct user types for a feature |
+| `dw-conduct-requirements-discovery` | Interactive guided requirements gathering |
+| `dw-extract-requirements-from-notes` | Pull requirements from raw notes or transcripts |
+| `dw-generate-product-requirements` | Generate structured requirements from an idea |
+| `dw-generate-user-stories` | Convert requirements into user stories |
+| `dw-generate-acceptance-criteria` | Write Given/When/Then criteria for stories |
+| `dw-propose-architecture-options` | Generate architecture options with tradeoffs |
+| `dw-review-architecture-design` | Critically review an architecture design |
+| `dw-generate-api-spec` | Produce a structured API specification |
+| `dw-generate-implementation-plan` | Break work into sequenced, estimated tasks |
+| `dw-identify-technical-risks` | Surface risks before implementation begins |
+| `dw-identify-edge-cases` | Find boundary conditions a design must handle |
+| `dw-evaluate-architecture-tradeoffs` | Compare architectural approaches |
+| `dw-summarize-meeting-notes` | Extract decisions, actions, and open questions |
 
 ### Health check
 
