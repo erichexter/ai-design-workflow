@@ -133,15 +133,13 @@ Every subsequent push to `master` auto-deploys.
 
 ### Connecting clients
 
-Replace `<your-subdomain>` with the subdomain assigned by Cloudflare.
-
 **Claude Desktop** — add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%AppData%\Claude\claude_desktop_config.json` (Windows):
 
 ```json
 {
   "mcpServers": {
     "ai-design-workflow": {
-      "url": "https://ai-design-workflow.<your-subdomain>.workers.dev/mcp"
+      "url": "https://ai-design-workflow.eric-hexter.workers.dev/mcp"
     }
   }
 }
@@ -154,7 +152,7 @@ Replace `<your-subdomain>` with the subdomain assigned by Cloudflare.
   "mcp": {
     "servers": {
       "ai-design-workflow": {
-        "url": "https://ai-design-workflow.<your-subdomain>.workers.dev/mcp"
+        "url": "https://ai-design-workflow.eric-hexter.workers.dev/mcp"
       }
     }
   }
@@ -163,14 +161,14 @@ Replace `<your-subdomain>` with the subdomain assigned by Cloudflare.
 
 **ChatGPT** (Plus/Team/Enterprise) — add as a Custom GPT Action using the server URL, or connect via the ChatGPT connectors panel using:
 ```
-https://ai-design-workflow.<your-subdomain>.workers.dev/mcp
+https://ai-design-workflow.eric-hexter.workers.dev/mcp
 ```
 
 ### Health check
 
 Verify the server is running:
 ```
-GET https://ai-design-workflow.<your-subdomain>.workers.dev/health
+GET https://ai-design-workflow.eric-hexter.workers.dev/health
 ```
 
 Returns `{"status":"ok","server":"ai-design-workflow-mcp"}`.
